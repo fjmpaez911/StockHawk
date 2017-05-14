@@ -1,6 +1,7 @@
 package com.udacity.stockhawk.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -44,9 +45,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     TextView error;
     private StockAdapter adapter;
 
+    private String lastStockAdded = null;
+    private Integer stocksCount = 0;
+
     @Override
-    public void onClick(String symbol) {
-        Timber.d("Symbol clicked: %s", symbol);
+    public void onClick(String history, String symbol) {
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.EXTRA_HISTORY, history);
+        intent.putExtra(DetailActivity.EXTRA_STOCK, symbol);
+        startActivity(intent);
+
     }
 
     @Override
@@ -121,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);
+                stocksCount = adapter.getItemCount();
+                lastStockAdded = symbol;
             } else {
                 String message = getString(R.string.toast_stock_added_no_connectivity, symbol);
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -146,7 +157,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data.getCount() != 0) {
             error.setVisibility(View.GONE);
         }
+
         adapter.setCursor(data);
+
+        if (data.getCount() - stocksCount == 0) {
+            String message = getString(R.string.toast_stock_not_found, lastStockAdded);
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
+
     }
 
 
