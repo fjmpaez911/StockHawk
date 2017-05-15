@@ -34,4 +34,6 @@
 
     <string name="toast_stock_not_found">Stock {%s} not found.</string>
 
+    <string name="empty_view_text">No stocks to show</string>
+
 </resources>

@@ -47,12 +47,6 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
         notifyDataSetChanged();
     }
 
-    String getSymbolAtPosition(int position) {
-
-        cursor.moveToPosition(position);
-        return cursor.getString(Contract.Quote.POSITION_SYMBOL);
-    }
-
     @Override
     public StockViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -131,6 +125,12 @@ class StockAdapter extends RecyclerView.Adapter<StockAdapter.StockViewHolder> {
 
         }
 
+    }
+
+    String getSymbolAtPosition(int position) {
+
+        cursor.moveToPosition(position);
+        return cursor.getString(Contract.Quote.POSITION_SYMBOL);
     }
 
     private String getStockHistory(int position) {

@@ -1,5 +1,7 @@
 package com.udacity.stockhawk.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -163,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data.getCount() - stocksCount == 0) {
             String message = getString(R.string.toast_stock_not_found, lastStockAdded);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        } else {
+            updateWidgets();
         }
 
     }
@@ -203,5 +207,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateWidgets() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        if (appWidgetManager != null) {
+            ComponentName name = new ComponentName(this, Widget.class);
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(name);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view);
+        }
     }
 }
