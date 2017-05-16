@@ -127,7 +127,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     void addStock(String symbol) {
-        if (symbol != null && !symbol.isEmpty()) {
+        if (symbol != null && !symbol.isEmpty()
+                && !PrefUtils.getStocks(this).contains(symbol.toUpperCase())) {
 
             if (networkUp()) {
                 swipeRefreshLayout.setRefreshing(true);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
 
-            PrefUtils.addStock(this, symbol);
+            PrefUtils.addStock(this, symbol.toUpperCase());
             QuoteSyncJob.syncImmediately(this);
         }
     }
